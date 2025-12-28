@@ -1,0 +1,267 @@
+@extends('layouts.app')
+
+@section('content')
+
+<div class="relative bg-linear-to-b from-orange-50 to-white overflow-hidden">
+    <div class="max-w-7xl mx-auto">
+        <div class="relative z-10 pb-8 bg-transparent sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32 pt-20 px-4 sm:px-6 lg:px-8">
+            <main class="mt-10 mx-auto max-w-7xl sm:mt-12 md:mt-16 lg:mt-20 xl:mt-28">
+                <div class="sm:text-center lg:text-left">
+                    <span class="inline-block py-1 px-3 rounded-full bg-orange-100 text-orange-600 border border-orange-200 text-xs font-bold tracking-wide mb-5 uppercase shadow-sm">
+                        Official Marketplace
+                    </span>
+                    <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
+                        <span class="block xl:inline">Solusi Kemasan</span>
+                        <span class="block text-orange-500">Terpercaya & Berkualitas</span>
+                    </h1>
+                    <p class="mt-4 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0 leading-relaxed">
+                        Aimi Packaging hadir sebagai mitra bisnis Anda dalam menyediakan perlengkapan packing berkualitas tinggi seperti Lakban, Bubble Mailer, dan Plastik Wrap dengan harga terbaik.
+                    </p>
+                    <div class="mt-8 sm:mt-10 sm:flex sm:justify-center lg:justify-start gap-4">
+                        <a href="#katalog" class="flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-orange-500 hover:bg-orange-600 md:py-4 md:text-lg shadow-lg shadow-orange-500/30 transition transform hover:-translate-y-1">
+                            Lihat Produk
+                        </a>
+                        <a href="https://wa.me/6282132257239" target="_blank" class="flex items-center justify-center px-8 py-3 border border-gray-300 text-base font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50 md:py-4 md:text-lg transition transform hover:-translate-y-1">
+                            Hubungi Sales
+                        </a>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 bg-gray-100">
+        <img class="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full opacity-90 hover:opacity-100 transition duration-500" src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" alt="Gudang Aimi Packaging">
+    </div>
+</div>
+
+<section class="py-16 bg-white border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center divide-y md:divide-y-0 md:divide-x divide-gray-100">
+            <div class="p-4 group">
+                <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-orange-50 text-orange-500 mb-4 group-hover:bg-orange-500 group-hover:text-white transition duration-300">
+                    <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Kualitas Terjamin</h3>
+                <p class="text-sm text-gray-500 px-4">Produk kami melalui quality control ketat untuk memastikan kekuatan dan daya tahan maksimal.</p>
+            </div>
+            <div class="p-4 group">
+                <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-orange-50 text-orange-500 mb-4 group-hover:bg-orange-500 group-hover:text-white transition duration-300">
+                    <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Harga Pabrik</h3>
+                <p class="text-sm text-gray-500 px-4">Dapatkan harga tangan pertama yang sangat kompetitif untuk pembelian grosir maupun eceran.</p>
+            </div>
+            <div class="p-4 group">
+                <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-orange-50 text-orange-500 mb-4 group-hover:bg-orange-500 group-hover:text-white transition duration-300">
+                    <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Pengiriman Cepat</h3>
+                <p class="text-sm text-gray-500 px-4">Proses pesanan yang cepat dan pengiriman aman ke seluruh wilayah Indonesia.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="katalog" class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+            <div>
+                <span class="text-orange-500 font-bold tracking-wide uppercase text-sm">Katalog Pilihan</span>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mt-2">Produk Terlaris Kami</h2>
+                <p class="mt-3 text-gray-500 max-w-xl">Temukan berbagai kebutuhan packing mulai dari lakban, bubble wrap, hingga kardus dengan kualitas terbaik.</p>
+            </div>
+            <a href="{{ Auth::check() ? route('pelanggan.products') : route('login') }}" class="inline-flex items-center gap-2 text-white bg-orange-500 hover:bg-orange-600 px-6 py-3 rounded-full font-medium transition shadow-md shadow-orange-500/20">
+                Lihat Semua Produk <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {{-- Loop Produk dari Database --}}
+            @forelse($featuredProducts ?? [] as $product)
+                <div class="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col h-full relative">
+                    <div class="absolute top-4 left-4 z-10">
+                        <span class="bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wide">Best Seller</span>
+                    </div>
+
+                    <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden bg-gray-100 group-hover:opacity-90 h-64 relative p-4 flex items-center justify-center">
+                        @if($product->image)
+                             <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="max-h-full w-auto object-contain transition duration-300 group-hover:scale-105">
+                        @else
+                             <div class="h-full w-full flex items-center justify-center text-gray-300">
+                                <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                             </div>
+                        @endif
+                    </div>
+                    
+                    <div class="p-5 flex flex-col grow">
+                        <div class="grow">
+                            <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2 min-h-14 group-hover:text-orange-500 transition-colors">{{ $product->name }}</h3>
+                            <div class="flex items-center justify-between mb-4">
+                                <p class="text-orange-600 font-bold text-xl">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+                                @if($product->stock > 0)
+                                    <span class="text-[10px] font-bold text-green-600 bg-green-100 px-2 py-1 rounded-full">Ready</span>
+                                @else
+                                    <span class="text-[10px] font-bold text-red-600 bg-red-100 px-2 py-1 rounded-full">Habis</span>
+                                @endif
+                            </div>
+                        </div>
+                        
+                        <div class="pt-4 border-t border-gray-100">
+                            @auth
+                                <a href="{{ route('pelanggan.products') }}" class="block w-full text-center px-4 py-2.5 bg-gray-900 text-white rounded-xl text-sm font-bold hover:bg-orange-500 transition duration-300">
+                                    Beli Sekarang
+                                </a>
+                            @else
+                                <a href="{{ route('login') }}" class="block w-full text-center px-4 py-2.5 bg-gray-900 text-white rounded-xl text-sm font-bold hover:bg-orange-500 transition duration-300">
+                                    Login untuk Beli
+                                </a>
+                            @endauth
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <div class="col-span-4 text-center py-16 bg-white rounded-3xl border-2 border-dashed border-gray-200">
+                    <div class="inline-flex items-center justify-center w-20 h-20 bg-gray-100 rounded-full mb-4 text-gray-400">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900">Produk Sedang Disiapkan</h3>
+                    <p class="text-gray-500 mt-2">Nantikan koleksi produk terbaru dari kami segera.</p>
+                </div>
+            @endforelse
+        </div>
+    </div>
+</section>
+
+<section id="kontak" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-16">
+            <div class="space-y-10">
+                <div>
+                    <h2 class="text-3xl font-extrabold text-gray-900 mb-6">Informasi & Bantuan</h2>
+                    <p class="text-gray-600 leading-relaxed mb-8">
+                        Kami berkomitmen memberikan pelayanan terbaik. Jangan ragu menghubungi tim kami untuk konsultasi produk, penawaran harga grosir, atau bantuan teknis lainnya.
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-4">
+                             <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center shrink-0 text-orange-600 mt-1">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-900 text-lg">Alamat Gudang</h4>
+                                <p class="text-gray-600">Jl. Legundi Business Park H 08-09, Jl. Karangandong No.58, Dusun Banjarsari, Banjaran, Driyorejo, Gresik Regency, East Java 61177</p>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-bold text-gray-900 text-lg mb-3">Hubungi & Ikuti Kami</h4>
+                            <div class="flex flex-wrap gap-3">
+                                <a href="https://shopee.co.id/aimiofficial" target="_blank" class="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg hover:border-orange-500 hover:text-orange-500 transition shadow-sm group">
+                                    <svg class="w-5 h-5 text-orange-500" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M19.8,7.6c-0.2-1.7-1.3-3-3-3.6c-0.3-0.1-0.6-0.1-0.9-0.1c-0.2,0-0.5,0-0.7,0.1c-0.9,0.2-1.6,0.7-2.1,1.4C12.8,5.9,13.4,6.4,13.4,6.4c0.4-0.5,0.9-0.9,1.5-1c0.1,0,0.3,0,0.4,0c0.9,0.3,1.4,0.9,1.5,1.7c0.6,0.5,1,1.2,1,2v0.1l0,0l0,0c0,2.6-2.5,4.3-5.5,4.3c-3,0-5.8-1.5-5.8-4.3l0,0l0,0c0-0.8,0.4-1.6,1-2.1c0.1-0.8,0.6-1.5,1.5-1.7c0.1,0,0.3,0,0.4,0c0.6,0.1,1.1,0.5,1.5,1c0,0,0.6-0.5,0.4-1C10.8,4.6,10.1,4.2,9.2,4c-0.2,0-0.5-0.1-0.7-0.1c-0.3,0-0.6,0-0.9,0.1c-1.7,0.6-2.8,1.9-3,3.6C3.1,8.3,2,10.2,2,12.7c0,5.8,4.1,10.3,10,10.3c5.9,0,10-4.5,10-10.3C22,10.2,20.9,8.3,19.8,7.6z"/>
+                                    </svg>
+                                    <span class="font-bold text-sm">Shopee</span>
+                                </a>
+
+                                <a href="https://www.instagram.com/aimiplastik.id/?hl=en" target="_blank" class="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg hover:border-pink-500 hover:text-pink-500 transition shadow-sm group">
+                                    <svg class="w-5 h-5 text-pink-600" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                                    </svg>
+                                    <span class="font-bold text-sm">Instagram</span>
+                                </a>
+
+                                <a href="mailto:aimipacking45@gmail.com" class="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg hover:border-blue-500 hover:text-blue-500 transition shadow-sm group">
+                                    <svg class="w-5 h-5 text-gray-500 group-hover:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                    <span class="font-bold text-sm">Email</span>
+                                </a>
+
+                                <a href="https://wa.me/6282132257239" target="_blank" class="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg hover:border-green-500 hover:text-green-500 transition shadow-sm group">
+                                    <svg class="w-5 h-5 text-green-600 group-hover:text-green-700" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                                    </svg>
+                                    <span class="font-bold text-sm">WhatsApp</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-t border-gray-100 pt-8">
+                    <h3 class="font-bold text-gray-900 text-lg mb-4">Metode Pengiriman</h3>
+                    <div class="flex gap-4 mb-8 grayscale hover:grayscale-0 transition duration-300">
+                        <div class="h-10 w-20 bg-white border border-gray-200 rounded flex items-center justify-center font-bold text-blue-700 italic">JNE</div>
+                        <div class="h-10 w-20 bg-white border border-gray-200 rounded flex items-center justify-center font-bold text-red-600">J&T</div>
+                        <div class="h-10 w-20 bg-white border border-gray-200 rounded flex items-center justify-center font-bold text-orange-500">SPX</div>
+                    </div>
+
+                    <h3 class="font-bold text-gray-900 text-lg mb-4">Metode Pembayaran</h3>
+                    <div class="flex gap-4 grayscale hover:grayscale-0 transition duration-300">
+                        <div class="h-10 w-20 bg-white border border-gray-200 rounded flex items-center justify-center font-bold text-blue-800">BCA</div>
+                        <div class="h-10 w-20 bg-white border border-gray-200 rounded flex items-center justify-center font-bold text-orange-600">BNI</div>
+                        <div class="h-10 w-20 bg-white border border-gray-200 rounded flex items-center justify-center font-bold text-blue-600">BRI</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-6">
+                <div class="h-full min-h-100 w-full bg-gray-200 rounded-3xl overflow-hidden shadow-xl border border-gray-100 relative">
+                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d23260.96283539689!2d112.56989777843683!3d-7.351839194096372!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e78090070c1c3d5%3A0x1ed6e7c3668ae23d!2sPT.%20Aimi%20Plastik%20Indonesia!5e0!3m2!1sen!2sid!4v1766849888941!5m2!1sen!2sid" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                     <div class="absolute bottom-6 left-6 right-6">
+                        <a href="https://wa.me/6282132257239" target="_blank" class="block w-full bg-white/90 backdrop-blur text-gray-900 py-4 rounded-xl font-bold text-center shadow-lg hover:bg-orange-500 hover:text-white transition duration-300 border border-gray-200">
+                            Chat Admin Sekarang
+                        </a>
+                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-20 bg-orange-50">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-extrabold text-gray-900">Berita & Tips Kemasan</h2>
+            <p class="mt-3 text-gray-500">Informasi terbaru seputar dunia packaging untuk bisnis Anda.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <article class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
+                <div class="h-48 bg-gray-200 flex items-center justify-center text-gray-400">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                </div>
+                <div class="p-6">
+                    <span class="text-xs font-bold text-orange-500 uppercase tracking-wide">Tips Bisnis</span>
+                    <h3 class="mt-2 text-xl font-bold text-gray-900 hover:text-orange-600 cursor-pointer">Cara Memilih Lakban yang Tepat untuk Packing Kardus Berat</h3>
+                    <p class="mt-3 text-gray-500 text-sm leading-relaxed">Simak panduan memilih jenis lakban agar paket Anda tetap aman dan tidak mudah jebol saat pengiriman.</p>
+                    <a href="#" class="mt-4 inline-block text-sm font-semibold text-orange-600 hover:text-orange-700">Baca Selengkapnya →</a>
+                </div>
+            </article>
+
+            <article class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
+                <div class="h-48 bg-gray-200 flex items-center justify-center text-gray-400">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                </div>
+                <div class="p-6">
+                    <span class="text-xs font-bold text-orange-500 uppercase tracking-wide">Produk Baru</span>
+                    <h3 class="mt-2 text-xl font-bold text-gray-900 hover:text-orange-600 cursor-pointer">Bubble Mailer vs Amplop Biasa: Mana yang Lebih Hemat?</h3>
+                    <p class="mt-3 text-gray-500 text-sm leading-relaxed">Perbandingan biaya dan efisiensi penggunaan bubble mailer untuk toko online Anda.</p>
+                    <a href="#" class="mt-4 inline-block text-sm font-semibold text-orange-600 hover:text-orange-700">Baca Selengkapnya →</a>
+                </div>
+            </article>
+
+            <article class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
+                <div class="h-48 bg-gray-200 flex items-center justify-center text-gray-400">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <div class="p-6">
+                    <span class="text-xs font-bold text-orange-500 uppercase tracking-wide">Info Pengiriman</span>
+                    <h3 class="mt-2 text-xl font-bold text-gray-900 hover:text-orange-600 cursor-pointer">Jadwal Operasional Pengiriman Selama Hari Libur Nasional</h3>
+                    <p class="mt-3 text-gray-500 text-sm leading-relaxed">Pastikan paket Anda sampai tepat waktu dengan mengecek jadwal pengiriman terbaru kami.</p>
+                    <a href="#" class="mt-4 inline-block text-sm font-semibold text-orange-600 hover:text-orange-700">Baca Selengkapnya →</a>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+
+@endsection
