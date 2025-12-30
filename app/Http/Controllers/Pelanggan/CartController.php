@@ -6,47 +6,66 @@ use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
     public function index()
     {
-        return view('pelanggan.cart.index', [
-            'carts' => Cart::with('product')
-                ->where('user_id', auth()->id())
-                ->get()
-        ]);
+        $carts = Cart::with('product')->where('user_id', Auth::id())->get();
+        return view('pelanggan.cart.index', compact('carts'));
     }
 
-    public function store(Product $product)
-    {
-        Cart::updateOrCreate(
-            [
-                'user_id' => auth()->id(),
-                'product_id' => $product->id
-            ],
-            [
-                'quantity' => \DB::raw('quantity + 1')
-            ]
-        );
-
-        return back()->with('success','Produk ditambahkan ke keranjang');
-    }
-
-    public function update(Request $request, Cart $cart)
+    public function store(Request $request)
     {
         $request->validate([
+            'product_id' => 'required|exists:products,id',
             'quantity' => 'required|integer|min:1'
         ]);
 
-        $cart->update(['quantity' => $request->quantity]);
+        $product = Product::find($request->product_id);
 
-        return back()->with('success','Keranjang diperbarui');
+        // Cek Stok
+        if ($product->stock < $request->quantity) {
+            return back()->with('error', 'Stok tidak mencukupi.');
+        }
+
+        // Cek apakah produk sudah ada di keranjang user
+        $cart = Cart::where('user_id', Auth::id())
+                    ->where('product_id', $request->product_id)
+                    ->first();
+
+        if ($cart) {
+            // Update quantity jika sudah ada
+            $cart->increment('quantity', $request->quantity);
+        } else {
+            // Buat baru jika belum ada
+            Cart::create([
+                'user_id' => Auth::id(),
+                'product_id' => $request->product_id,
+                'quantity' => $request->quantity
+            ]);
+        }
+
+        return redirect()->route('cart')->with('success', 'Produk masuk keranjang!');
     }
 
-    public function destroy(Cart $cart)
+    public function update(Request $request, $id)
     {
-        $cart->delete();
-        return back()->with('success','Item dihapus');
+        $cart = Cart::where('user_id', Auth::id())->findOrFail($id);
+        
+        // Cek stok sebelum update
+        if ($cart->product->stock < $request->quantity) {
+            return back()->with('error', 'Stok maksimal hanya ' . $cart->product->stock);
+        }
+
+        $cart->update(['quantity' => $request->quantity]);
+        return back()->with('success', 'Keranjang diperbarui.');
+    }
+
+    public function destroy($id)
+    {
+        Cart::where('user_id', Auth::id())->where('id', $id)->delete();
+        return back()->with('success', 'Produk dihapus dari keranjang.');
     }
 }

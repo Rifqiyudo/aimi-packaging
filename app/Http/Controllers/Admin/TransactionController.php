@@ -3,45 +3,32 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Order;
+use App\Models\Transaction;
+use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
-    /**
-     * Daftar transaksi
-     */
     public function index()
     {
-        return view('admin.transactions.index', [
-            'orders' => Order::with('user')
-                ->latest()
-                ->get()
-        ]);
+        // Ambil data transaksi beserta User dan Order
+        // Urutkan dari yang terbaru
+        $transactions = Transaction::with(['user', 'order'])
+            ->latest()
+            ->paginate(15);
+
+        // Hitung total uang masuk yang sukses saja
+        $totalIncome = Transaction::where('status', 'success')->sum('amount');
+        $pendingCount = Transaction::where('status', 'pending')->count();
+
+        return view('admin.transactions.index', compact('transactions', 'totalIncome', 'pendingCount'));
     }
 
-    /**
-     * Detail transaksi
-     */
-    public function show(Order $order)
+    // Fitur hapus history transaksi (opsional)
+    public function destroy($id)
     {
-        return view('admin.transactions.show', [
-            'order' => $order->load('items.product', 'user')
-        ]);
-    }
+        $transaction = Transaction::findOrFail($id);
+        $transaction->delete();
 
-    /**
-     * Update status manual (EMERGENCY ONLY)
-     */
-    public function updateStatus(Order $order, $status)
-    {
-        if (!in_array($status, ['paid', 'cancelled'])) {
-            abort(400);
-        }
-
-        $order->update([
-            'status' => $status
-        ]);
-
-        return back()->with('success', 'Status transaksi diperbarui');
+        return back()->with('success', 'Riwayat transaksi dihapus.');
     }
 }

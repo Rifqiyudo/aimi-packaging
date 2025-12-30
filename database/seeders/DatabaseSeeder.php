@@ -72,7 +72,7 @@ class DatabaseSeeder extends Seeder
             'description' => 'Plastik wrapping industrial grade. Elastis dan tidak mudah sobek. Melindungi barang dari debu dan air.',
             'price' => 285000,
             'stock' => 100,
-            'is_active' => true,
+            'is_active' => true,   
             'is_featured' => true, // Tampil di Beranda
             'image' => 'images/products/plastik-wrap.jpg'
         ]);

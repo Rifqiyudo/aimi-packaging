@@ -3,75 +3,81 @@
 namespace App\Http\Controllers\Pelanggan;
 
 use App\Http\Controllers\Controller;
-use App\Models\{Cart, Order, OrderItem, Stock};
+use App\Models\Cart;
+use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Midtrans\Snap;
+use Illuminate\Support\Str;
 
 class CheckoutController extends Controller
 {
     public function index()
     {
-        $carts = Cart::with('product.stock')
-            ->where('user_id', auth()->id())
-            ->get();
+        $carts = Cart::with('product')->where('user_id', Auth::id())->get();
 
-        abort_if($carts->isEmpty(), 404);
+        if ($carts->isEmpty()) {
+            return redirect()->route('pelanggan.products')->with('error', 'Keranjang kosong.');
+        }
 
         return view('pelanggan.checkout.index', compact('carts'));
     }
 
-    public function process()
+    public function process(Request $request)
     {
-        DB::transaction(function () {
+        $request->validate([
+            'address' => 'required|string',
+            'phone' => 'required|string',
+            'shipping_method' => 'required|string',
+            'payment_method' => 'required|string',
+        ]);
 
-            $carts = Cart::with('product.stock')
-                ->where('user_id', auth()->id())
-                ->get();
+        $user = Auth::user();
+        $carts = Cart::with('product')->where('user_id', $user->id)->get();
 
-            $subtotal = $carts->sum(fn($c) => $c->subtotal());
+        if ($carts->isEmpty()) {
+            return back()->with('error', 'Keranjang kosong.');
+        }
 
+        // Hitung Total
+        $totalPrice = 0;
+        foreach ($carts as $cart) {
+            $totalPrice += $cart->product->price * $cart->quantity;
+        }
+
+        // GUNAKAN DATABASE TRANSACTION (Agar aman data konsisten)
+        DB::transaction(function () use ($request, $user, $carts, $totalPrice) {
+            
+            // 1. Buat Order
             $order = Order::create([
-                'user_id' => auth()->id(),
-                'subtotal' => $subtotal,
-                'discount' => 0,
-                'total' => $subtotal,
-                'status' => 'pending',
-                'payment_method' => 'midtrans'
+                'user_id' => $user->id,
+                'invoice_number' => 'INV-' . date('Ymd') . '-' . strtoupper(Str::random(5)),
+                'total_price' => $totalPrice,
+                'status' => 'pending', // Menunggu Konfirmasi Admin
+                'address' => $request->address,
+                'phone' => $request->phone,
+                'shipping_method' => $request->shipping_method,
+                'payment_method' => $request->payment_method,
             ]);
 
+            // 2. Pindahkan isi Cart ke OrderItems & Kurangi Stok
             foreach ($carts as $cart) {
                 OrderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $cart->product_id,
                     'quantity' => $cart->quantity,
                     'price' => $cart->product->price,
-                    'subtotal' => $cart->subtotal()
                 ]);
+
+                // Kurangi Stok Produk
+                $cart->product->decrement('stock', $cart->quantity);
             }
 
-            Cart::where('user_id', auth()->id())->delete();
-
-            // MIDTRANS
-            \Midtrans\Config::$serverKey = config('midtrans.server_key');
-            \Midtrans\Config::$isProduction = false;
-
-            $snapToken = Snap::getSnapToken([
-                'transaction_details' => [
-                    'order_id' => 'AIMI-' . $order->id,
-                    'gross_amount' => $order->total
-                ],
-                'customer_details' => [
-                    'first_name' => auth()->user()->name,
-                    'email' => auth()->user()->email
-                ]
-            ]);
-
-            $order->update(['midtrans_order_id' => 'AIMI-' . $order->id]);
-
-            session(['snap_token' => $snapToken]);
+            // 3. Kosongkan Keranjang
+            Cart::where('user_id', $user->id)->delete();
         });
 
-        return redirect()->route('pelanggan.orders');
+        return redirect()->route('pelanggan.orders.index')->with('success', 'Pesanan berhasil dibuat! Menunggu konfirmasi admin.');
     }
 }

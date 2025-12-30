@@ -2,46 +2,27 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
-        'category_id',
         'name',
-        'slug',
+        'slug', // <--- PASTIKAN INI ADA
+        'category_id',
         'description',
         'price',
+        'stock',
         'image',
-        'is_active'
+        'is_active',
+        'is_featured',
     ];
-
-    /* =====================
-     | RELATIONSHIPS
-     ===================== */
 
     public function category()
     {
         return $this->belongsTo(Category::class);
-    }
-
-    public function stock()
-    {
-        return $this->hasOne(Stock::class);
-    }
-
-    public function reviews()
-    {
-        return $this->hasMany(Review::class);
-    }
-
-    public function orderItems()
-    {
-        return $this->hasMany(OrderItem::class);
-    }
-
-    public function carts()
-    {
-        return $this->hasMany(Cart::class);
     }
 }

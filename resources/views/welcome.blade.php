@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="relative bg-linear-to-b from-orange-50 to-white overflow-hidden">
+<div class="relative bg-gradient-to-b from-orange-50 to-white overflow-hidden">
     <div class="max-w-7xl mx-auto">
         <div class="relative z-10 pb-8 bg-transparent sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32 pt-20 px-4 sm:px-6 lg:px-8">
             <main class="mt-10 mx-auto max-w-7xl sm:mt-12 md:mt-16 lg:mt-20 xl:mt-28">
@@ -30,7 +30,7 @@
         </div>
     </div>
     <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 bg-gray-100">
-        <img class="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full opacity-90 hover:opacity-100 transition duration-500" src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" alt="Gudang Aimi Packaging">
+        <img class="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full opacity-90 hover:opacity-100 transition duration-500" src="{{ asset('images/Plastik4.jpg') }}" alt="Gudang Aimi Packaging - Plastik Berkualitas">
     </div>
 </div>
 
@@ -57,6 +57,40 @@
                 </div>
                 <h3 class="text-lg font-bold text-gray-900 mb-2">Pengiriman Cepat</h3>
                 <p class="text-sm text-gray-500 px-4">Proses pesanan yang cepat dan pengiriman aman ke seluruh wilayah Indonesia.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-20 bg-white border-t border-gray-100">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="flex flex-col lg:flex-row items-center gap-12">
+            <div class="lg:w-1/2 relative">
+                <div class="aspect-w-4 aspect-h-3 rounded-2xl overflow-hidden shadow-xl bg-gray-100">
+                    <img src="{{ asset('images/perusahaan.jpg') }}" alt="Gudang Stok Aimi Plastik" class="object-cover w-full h-full transform hover:scale-105 transition duration-500">
+                </div>
+                <div class="absolute -bottom-6 -right-6 bg-white p-6 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-gray-50 max-w-xs hidden md:block">
+                    <p class="text-orange-600 font-bold text-lg">"Protecting Values"</p>
+                    <p class="text-gray-500 text-sm mt-1">Filosofi kami dalam menjaga kualitas produk Anda.</p>
+                </div>
+            </div>
+
+            <div class="lg:w-1/2">
+                <span class="text-orange-600 font-bold uppercase tracking-wider text-sm">Sekilas Tentang Kami</span>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mt-2 mb-6">Mitra Solusi Kemasan Terpercaya Sejak 2020</h2>
+                
+                <p class="text-gray-600 text-lg leading-relaxed mb-6">
+                    PT. Aimi Plastik Indonesia berdedikasi untuk menyediakan perlengkapan packing berkualitas tinggi bagi UMKM hingga industri besar di seluruh Indonesia.
+                </p>
+                
+                <p class="text-gray-600 text-lg leading-relaxed mb-8">
+                    Visi kami adalah menjadi pemimpin pasar yang mengutamakan inovasi dan kepuasan pelanggan melalui produk yang presisi dan pelayanan prima.
+                </p>
+
+                <a href="{{ route('about') }}" class="inline-flex items-center text-orange-600 font-bold hover:text-orange-700 transition group">
+                    Baca Profil Lengkap 
+                    <svg class="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                </a>
             </div>
         </div>
     </div>
@@ -225,41 +259,31 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <article class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
-                <div class="h-48 bg-gray-200 flex items-center justify-center text-gray-400">
-                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            @forelse($latestNews ?? [] as $news)
+                <article class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
+                    <div class="h-48 bg-gray-200 relative">
+                        @if($news->image)
+                            <img src="{{ asset('storage/' . $news->image) }}" alt="{{ $news->title }}" class="w-full h-full object-cover">
+                        @else
+                            <div class="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100">
+                                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="p-6">
+                        <span class="text-xs font-bold text-orange-500 uppercase tracking-wide">{{ $news->category }}</span>
+                        <h3 class="mt-2 text-xl font-bold text-gray-900 hover:text-orange-600 cursor-pointer line-clamp-2">{{ $news->title }}</h3>
+                        <p class="mt-3 text-gray-500 text-sm leading-relaxed line-clamp-3">
+                            {{ \Illuminate\Support\Str::limit($news->content, 100) }}
+                        </p>
+                        <a href="#" class="mt-4 inline-block text-sm font-semibold text-orange-600 hover:text-orange-700">Baca Selengkapnya →</a>
+                    </div>
+                </article>
+            @empty
+                <div class="col-span-3 text-center py-10">
+                    <p class="text-gray-500 italic">Belum ada berita terbaru.</p>
                 </div>
-                <div class="p-6">
-                    <span class="text-xs font-bold text-orange-500 uppercase tracking-wide">Tips Bisnis</span>
-                    <h3 class="mt-2 text-xl font-bold text-gray-900 hover:text-orange-600 cursor-pointer">Cara Memilih Lakban yang Tepat untuk Packing Kardus Berat</h3>
-                    <p class="mt-3 text-gray-500 text-sm leading-relaxed">Simak panduan memilih jenis lakban agar paket Anda tetap aman dan tidak mudah jebol saat pengiriman.</p>
-                    <a href="#" class="mt-4 inline-block text-sm font-semibold text-orange-600 hover:text-orange-700">Baca Selengkapnya →</a>
-                </div>
-            </article>
-
-            <article class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
-                <div class="h-48 bg-gray-200 flex items-center justify-center text-gray-400">
-                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                </div>
-                <div class="p-6">
-                    <span class="text-xs font-bold text-orange-500 uppercase tracking-wide">Produk Baru</span>
-                    <h3 class="mt-2 text-xl font-bold text-gray-900 hover:text-orange-600 cursor-pointer">Bubble Mailer vs Amplop Biasa: Mana yang Lebih Hemat?</h3>
-                    <p class="mt-3 text-gray-500 text-sm leading-relaxed">Perbandingan biaya dan efisiensi penggunaan bubble mailer untuk toko online Anda.</p>
-                    <a href="#" class="mt-4 inline-block text-sm font-semibold text-orange-600 hover:text-orange-700">Baca Selengkapnya →</a>
-                </div>
-            </article>
-
-            <article class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
-                <div class="h-48 bg-gray-200 flex items-center justify-center text-gray-400">
-                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                </div>
-                <div class="p-6">
-                    <span class="text-xs font-bold text-orange-500 uppercase tracking-wide">Info Pengiriman</span>
-                    <h3 class="mt-2 text-xl font-bold text-gray-900 hover:text-orange-600 cursor-pointer">Jadwal Operasional Pengiriman Selama Hari Libur Nasional</h3>
-                    <p class="mt-3 text-gray-500 text-sm leading-relaxed">Pastikan paket Anda sampai tepat waktu dengan mengecek jadwal pengiriman terbaru kami.</p>
-                    <a href="#" class="mt-4 inline-block text-sm font-semibold text-orange-600 hover:text-orange-700">Baca Selengkapnya →</a>
-                </div>
-            </article>
+            @endforelse
         </div>
     </div>
 </section>

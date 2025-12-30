@@ -10,7 +10,9 @@ use App\Models\User;
 
 class AuthController extends Controller
 {
-    // --- LOGIN ---
+    // ==========================================================
+    // LOGIN
+    // ==========================================================
 
     public function showLogin()
     {
@@ -19,31 +21,44 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        // 1. Validasi Input
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required'
         ]);
 
+        // 2. Cek Credential (Email & Password) ke Database
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            // Redirect sesuai role
-            if (Auth::user()->role === 'admin') {
-                return redirect()->route('admin.dashboard');
-            } elseif (Auth::user()->role === 'karyawan') {
-                return redirect()->route('karyawan.dashboard');
-            }
+            // 3. Ambil User & Role Saat Ini
+            $user = Auth::user();
+            
+            // Konversi role ke huruf kecil untuk keamanan (antisipasi typo di DB: Admin vs admin)
+            $role = strtolower($user->role); 
 
-            // Jika pelanggan, kembali ke home
+            // 4. LOGIKA REDIRECT (ALUR KUNCI)
+            
+            // SKENARIO A: Jika Role adalah ADMIN
+            // Arahkan ke Dashboard Admin (Grafik, Laporan, Produk, dll)
+            if ($role === 'admin') {
+                return redirect()->route('admin.dashboard');
+            } 
+            
+            // SKENARIO B: Jika Role adalah PELANGGAN (Atau role lain)
+            // Arahkan ke Halaman Depan (Beranda/Katalog)
             return redirect()->route('home');
         }
 
+        // 5. Jika Login Gagal (Password/Email Salah)
         return back()->withErrors([
             'email' => 'Email atau password salah.',
         ])->onlyInput('email');
     }
 
-    // --- REGISTER (INI YANG TADI HILANG) ---
+    // ==========================================================
+    // REGISTER
+    // ==========================================================
 
     public function showRegister()
     {
@@ -52,7 +67,7 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        // Validasi Input
+        // 1. Validasi Input
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
@@ -61,28 +76,32 @@ class AuthController extends Controller
             'address' => 'nullable|string',
         ]);
 
-        // Buat User Baru
+        // 2. Buat User Baru 
+        // PENTING: Role default diset 'pelanggan' agar user biasa tidak masuk admin
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
-            'role' => 'pelanggan', // Default role pelanggan saat register sendiri
+            'role' => 'pelanggan', 
             'phone' => $validated['phone'],
             'address' => $validated['address'],
         ]);
 
-        // Otomatis Login setelah daftar
+        // 3. Otomatis Login setelah daftar
         Auth::login($user);
 
-        // Redirect ke Home
+        // 4. Redirect ke Home (User baru pasti pelanggan)
         return redirect()->route('home')->with('success', 'Registrasi berhasil! Selamat datang.');
     }
 
-    // --- LOGOUT ---
+    // ==========================================================
+    // LOGOUT
+    // ==========================================================
 
     public function logout(Request $request)
     {
         Auth::logout();
+        
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 

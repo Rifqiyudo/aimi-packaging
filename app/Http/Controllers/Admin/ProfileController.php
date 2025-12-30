@@ -4,48 +4,44 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Hash;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
-    /**
-     * Profil admin
-     */
     public function index()
     {
-        return view('admin.profile.index', [
-            'user' => auth()->user()
-        ]);
+        $user = Auth::user();
+        return view('admin.profile.index', compact('user'));
     }
 
-    /**
-     * Update data profil
-     */
     public function update(Request $request)
     {
+        // Validasi input (Opsional tapi sangat disarankan)
         $request->validate([
-            'name' => 'required|string|max:100',
-            'email' => 'required|email'
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'password' => 'nullable|min:8', // Password boleh kosong jika tidak ingin diganti
         ]);
 
-        auth()->user()->update($request->only('name','email'));
+        /** * Baris ini memberitahu VS Code bahwa $user adalah Model User.
+         * Ini akan menghilangkan error "Undefined method 'save'"
+         * @var \App\Models\User $user 
+         */
+        $user = Auth::user();
 
-        return back()->with('success', 'Profil diperbarui');
-    }
+        // Update data diri standar (Nama & Email)
+        $user->name = $request->name;
+        $user->email = $request->email;
 
-    /**
-     * Update password
-     */
-    public function updatePassword(Request $request)
-    {
-        $request->validate([
-            'password' => 'required|min:8|confirmed'
-        ]);
+        // Cek apakah user mengisi kolom password
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
 
-        auth()->user()->update([
-            'password' => Hash::make($request->password)
-        ]);
+        // Simpan perubahan ke database
+        $user->save();
 
-        return back()->with('success', 'Password berhasil diganti');
+        return back()->with('success', 'Profile updated successfully!');
     }
 }

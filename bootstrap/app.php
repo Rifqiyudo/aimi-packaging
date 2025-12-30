@@ -10,9 +10,20 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware): void {
-        //
+    ->withMiddleware(function (Middleware $middleware) {
+        
+        // =================================================================
+        // DAFTAR ALIAS MIDDLEWARE (WAJIB ADA)
+        // =================================================================
+        // Bagian ini menghubungkan kata kunci 'role' di route dengan file Logic-nya
+        
+        $middleware->alias([
+            'role' => \App\Http\Middleware\RoleMiddleware::class,
+        ]);
+
+        // =================================================================
+
     })
-    ->withExceptions(function (Exceptions $exceptions): void {
+    ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();
