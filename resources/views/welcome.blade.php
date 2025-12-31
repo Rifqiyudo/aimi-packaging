@@ -110,30 +110,64 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {{-- Loop Produk dari Database --}}
             @forelse($featuredProducts ?? [] as $product)
                 <div class="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col h-full relative">
                     <div class="absolute top-4 left-4 z-10">
                         <span class="bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wide">Best Seller</span>
                     </div>
 
+                    {{-- IMAGE CONTAINER --}}
                     <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden bg-gray-100 group-hover:opacity-90 h-64 relative p-4 flex items-center justify-center">
                         @if($product->image)
-                             <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="max-h-full w-auto object-contain transition duration-300 group-hover:scale-105">
+                             <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="max-h-full w-auto object-contain transition duration-300 group-hover:scale-105">
                         @else
                              <div class="h-full w-full flex items-center justify-center text-gray-300">
                                 <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                              </div>
                         @endif
+
+                        {{-- OVERLAY BUTTONS --}}
+                        <div class="absolute inset-0 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition duration-300 bg-black/10 backdrop-blur-[2px]">
+                            
+                            {{-- Tombol Preview (Fix: data-product) --}}
+                            <button type="button" 
+                                    onclick="openPreviewModal(this)" 
+                                    data-product="{{ json_encode($product) }}"
+                                    class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-600 hover:text-orange-600 hover:shadow-lg transition transform hover:-translate-y-1"
+                                    title="Lihat Detail">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            </button>
+
+                            {{-- Tombol Quick Cart --}}
+                            @auth
+                                <form action="{{ route('cart.add') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    <input type="hidden" name="quantity" value="1">
+                                    <button type="submit" class="w-10 h-10 bg-orange-600 rounded-full flex items-center justify-center text-white hover:bg-orange-700 hover:shadow-lg transition transform hover:-translate-y-1" title="Tambah ke Keranjang">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                    </button>
+                                </form>
+                            @else
+                                <a href="{{ route('login') }}" class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-600 hover:text-orange-600 hover:shadow-lg transition" title="Login untuk Belanja">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                </a>
+                            @endauth
+                        </div>
                     </div>
                     
                     <div class="p-5 flex flex-col grow">
                         <div class="grow">
-                            <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2 min-h-14 group-hover:text-orange-500 transition-colors">{{ $product->name }}</h3>
+                            {{-- Judul Produk (Fix: data-product) --}}
+                            <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2 min-h-14 group-hover:text-orange-500 transition-colors cursor-pointer" 
+                                onclick="openPreviewModal(this)"
+                                data-product="{{ json_encode($product) }}">
+                                {{ $product->name }}
+                            </h3>
                             <div class="flex items-center justify-between mb-4">
                                 <p class="text-orange-600 font-bold text-xl">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
                                 @if($product->stock > 0)
-                                    <span class="text-[10px] font-bold text-green-600 bg-green-100 px-2 py-1 rounded-full">Ready</span>
+                                    <span class="text-[10px] font-bold text-green-600 bg-green-100 px-2 py-1 rounded-full">Ready: {{ $product->stock }}</span>
                                 @else
                                     <span class="text-[10px] font-bold text-red-600 bg-red-100 px-2 py-1 rounded-full">Habis</span>
                                 @endif
@@ -141,15 +175,13 @@
                         </div>
                         
                         <div class="pt-4 border-t border-gray-100">
-                            @auth
-                                <a href="{{ route('pelanggan.products') }}" class="block w-full text-center px-4 py-2.5 bg-gray-900 text-white rounded-xl text-sm font-bold hover:bg-orange-500 transition duration-300">
-                                    Beli Sekarang
-                                </a>
-                            @else
-                                <a href="{{ route('login') }}" class="block w-full text-center px-4 py-2.5 bg-gray-900 text-white rounded-xl text-sm font-bold hover:bg-orange-500 transition duration-300">
-                                    Login untuk Beli
-                                </a>
-                            @endauth
+                            {{-- Tombol Utama (Fix: data-product) --}}
+                            <button type="button" 
+                                    onclick="openPreviewModal(this)" 
+                                    data-product="{{ json_encode($product) }}"
+                                    class="block w-full text-center px-4 py-2.5 bg-gray-900 text-white rounded-xl text-sm font-bold hover:bg-orange-500 transition duration-300">
+                                Detail & Beli
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -160,6 +192,50 @@
                     </div>
                     <h3 class="text-xl font-bold text-gray-900">Produk Sedang Disiapkan</h3>
                     <p class="text-gray-500 mt-2">Nantikan koleksi produk terbaru dari kami segera.</p>
+                </div>
+            @endforelse
+        </div>
+    </div>
+</section>
+
+<section class="py-20 bg-orange-50">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-extrabold text-gray-900">Berita & Tips Kemasan</h2>
+            <p class="mt-3 text-gray-500">Informasi terbaru seputar dunia packaging untuk bisnis Anda.</p>
+            <a href="{{ route('blog.index') }}" class="inline-block mt-4 text-orange-600 font-bold hover:underline">
+                Lihat Semua Artikel →
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            @forelse($latestNews ?? [] as $news)
+                <article class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
+                    <div class="h-48 bg-gray-200 relative group">
+                        <a href="{{ route('blog.show', $news->id) }}" class="block w-full h-full">
+                            @if($news->image)
+                                <img src="{{ asset('storage/' . $news->image) }}" alt="{{ $news->title }}" class="w-full h-full object-cover transition duration-300 group-hover:scale-105">
+                            @else
+                                <div class="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100">
+                                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                                </div>
+                            @endif
+                        </a>
+                    </div>
+                    <div class="p-6">
+                        <span class="text-xs font-bold text-orange-500 uppercase tracking-wide">{{ $news->category }}</span>
+                        <h3 class="mt-2 text-xl font-bold text-gray-900 hover:text-orange-600 cursor-pointer line-clamp-2">
+                            <a href="{{ route('blog.show', $news->id) }}">{{ $news->title }}</a>
+                        </h3>
+                        <p class="mt-3 text-gray-500 text-sm leading-relaxed line-clamp-3">
+                            {{ \Illuminate\Support\Str::limit($news->content, 100) }}
+                        </p>
+                        <a href="{{ route('blog.show', $news->id) }}" class="mt-4 inline-block text-sm font-semibold text-orange-600 hover:text-orange-700">Baca Selengkapnya →</a>
+                    </div>
+                </article>
+            @empty
+                <div class="col-span-3 text-center py-10">
+                    <p class="text-gray-500 italic">Belum ada berita terbaru.</p>
                 </div>
             @endforelse
         </div>
@@ -251,41 +327,154 @@
     </div>
 </section>
 
-<section class="py-20 bg-orange-50">
-    <div class="max-w-7xl mx-auto px-6 lg:px-8">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl font-extrabold text-gray-900">Berita & Tips Kemasan</h2>
-            <p class="mt-3 text-gray-500">Informasi terbaru seputar dunia packaging untuk bisnis Anda.</p>
-        </div>
+{{-- ========================================================= --}}
+{{-- MODAL PREVIEW PRODUK (POPUP)                              --}}
+{{-- ========================================================= --}}
+<div id="previewModal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    {{-- Background Backdrop --}}
+    <div class="fixed inset-0 bg-gray-900/75 transition-opacity backdrop-blur-sm" onclick="closePreviewModal()"></div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            @forelse($latestNews ?? [] as $news)
-                <article class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
-                    <div class="h-48 bg-gray-200 relative">
-                        @if($news->image)
-                            <img src="{{ asset('storage/' . $news->image) }}" alt="{{ $news->title }}" class="w-full h-full object-cover">
-                        @else
-                            <div class="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100">
-                                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+    <div class="fixed inset-0 z-50 overflow-y-auto">
+        <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+            
+            {{-- Modal Panel --}}
+            <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-4xl border border-gray-100">
+                
+                {{-- Tombol Close --}}
+                <button onclick="closePreviewModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-50 bg-white rounded-full p-1 shadow-sm">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+
+                <div class="grid grid-cols-1 md:grid-cols-2">
+                    {{-- Kolom Kiri: Gambar --}}
+                    <div class="bg-gray-100 p-8 flex items-center justify-center">
+                        <img id="modalImage" src="" alt="Product Image" class="w-full max-h-96 object-contain mix-blend-multiply">
+                        <div id="modalNoImage" class="hidden flex flex-col items-center text-gray-400">
+                            <svg class="w-16 h-16 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            <span>Gambar Tidak Tersedia</span>
+                        </div>
+                    </div>
+
+                    {{-- Kolom Kanan: Detail & Form --}}
+                    <div class="p-8 flex flex-col h-full">
+                        <div class="mb-auto">
+                            <h3 id="modalTitle" class="text-2xl font-black text-gray-900 leading-tight mb-2">Nama Produk</h3>
+                            <p id="modalPrice" class="text-3xl font-bold text-orange-600 mb-4">Rp 0</p>
+                            
+                            <div class="border-t border-b border-gray-100 py-4 mb-6">
+                                <p id="modalDesc" class="text-gray-600 leading-relaxed text-sm h-24 overflow-y-auto pr-2">Deskripsi produk...</p>
                             </div>
-                        @endif
+
+                            <p class="text-sm font-bold text-gray-700 mb-2">Stok Tersedia: <span id="modalStock" class="text-green-600">0</span></p>
+                        </div>
+
+                        {{-- Form Add to Cart --}}
+                        @auth
+                            <form action="{{ route('cart.add') }}" method="POST" class="mt-6">
+                                @csrf
+                                <input type="hidden" name="product_id" id="modalProductId">
+                                
+                                <div class="flex items-center gap-4">
+                                    <div class="max-w-32">
+                                        <label class="sr-only">Jumlah</label>
+                                        <div class="relative flex items-center">
+                                            <button type="button" onclick="decrementQty()" class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 focus:ring-2 focus:outline-none">
+                                                <svg class="w-3 h-3 text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/></svg>
+                                            </button>
+                                            <input type="text" name="quantity" id="modalQty" class="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm font-bold block w-full py-2.5" value="1" readonly required />
+                                            <button type="button" onclick="incrementQty()" class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 focus:ring-2 focus:outline-none">
+                                                <svg class="w-3 h-3 text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/></svg>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" id="btnAddToCart" class="flex-1 text-white bg-orange-600 hover:bg-orange-700 focus:ring-4 focus:outline-none focus:ring-orange-300 font-bold rounded-lg text-sm px-5 py-3 text-center flex items-center justify-center gap-2 shadow-lg shadow-orange-200 transition">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                        Masukan Keranjang
+                                    </button>
+                                </div>
+                            </form>
+                        @else
+                            <a href="{{ route('login') }}" class="block w-full bg-gray-900 text-white text-center py-3 rounded-xl font-bold hover:bg-gray-800 transition">
+                                Login untuk Membeli
+                            </a>
+                        @endauth
                     </div>
-                    <div class="p-6">
-                        <span class="text-xs font-bold text-orange-500 uppercase tracking-wide">{{ $news->category }}</span>
-                        <h3 class="mt-2 text-xl font-bold text-gray-900 hover:text-orange-600 cursor-pointer line-clamp-2">{{ $news->title }}</h3>
-                        <p class="mt-3 text-gray-500 text-sm leading-relaxed line-clamp-3">
-                            {{ \Illuminate\Support\Str::limit($news->content, 100) }}
-                        </p>
-                        <a href="#" class="mt-4 inline-block text-sm font-semibold text-orange-600 hover:text-orange-700">Baca Selengkapnya →</a>
-                    </div>
-                </article>
-            @empty
-                <div class="col-span-3 text-center py-10">
-                    <p class="text-gray-500 italic">Belum ada berita terbaru.</p>
                 </div>
-            @endforelse
+            </div>
         </div>
     </div>
-</section>
+</div>
+
+{{-- SCRIPT UNTUK MODAL (FIXED) --}}
+<script>
+    let currentStock = 0;
+
+    function openPreviewModal(element) {
+        // Ambil data dari atribut data-product
+        const productData = element.getAttribute('data-product');
+        if (!productData) return;
+
+        const product = JSON.parse(productData);
+
+        // Isi Data Modal
+        document.getElementById('modalTitle').innerText = product.name;
+        document.getElementById('modalPrice').innerText = 'Rp ' + new Intl.NumberFormat('id-ID').format(product.price);
+        document.getElementById('modalDesc').innerText = product.description || 'Tidak ada deskripsi.';
+        document.getElementById('modalStock').innerText = product.stock;
+        
+        // Handle Image
+        const imgEl = document.getElementById('modalImage');
+        const noImgEl = document.getElementById('modalNoImage');
+        
+        if(product.image) {
+            // Gunakan path absolut agar aman
+            imgEl.src = "{{ asset('storage') }}/" + product.image;
+            imgEl.classList.remove('hidden');
+            noImgEl.classList.add('hidden');
+        } else {
+            imgEl.classList.add('hidden');
+            noImgEl.classList.remove('hidden');
+        }
+
+        // Set ID & Stock Logic
+        currentStock = product.stock;
+        const qtyInput = document.getElementById('modalQty');
+        if(qtyInput) {
+            qtyInput.value = 1;
+            document.getElementById('modalProductId').value = product.id;
+            
+            const btnAdd = document.getElementById('btnAddToCart');
+            if(product.stock <= 0) {
+                btnAdd.disabled = true;
+                btnAdd.classList.add('opacity-50', 'cursor-not-allowed');
+                btnAdd.innerText = "Stok Habis";
+            } else {
+                btnAdd.disabled = false;
+                btnAdd.classList.remove('opacity-50', 'cursor-not-allowed');
+                btnAdd.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg> Masukan Keranjang';
+            }
+        }
+
+        // Tampilkan Modal
+        document.getElementById('previewModal').classList.remove('hidden');
+    }
+
+    function closePreviewModal() {
+        document.getElementById('previewModal').classList.add('hidden');
+    }
+
+    function incrementQty() {
+        const input = document.getElementById('modalQty');
+        let val = parseInt(input.value);
+        if(val < currentStock) input.value = val + 1;
+    }
+
+    function decrementQty() {
+        const input = document.getElementById('modalQty');
+        let val = parseInt(input.value);
+        if(val > 1) input.value = val - 1;
+    }
+</script>
 
 @endsection

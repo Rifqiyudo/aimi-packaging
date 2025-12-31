@@ -13,15 +13,22 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         
         // =================================================================
-        // DAFTAR ALIAS MIDDLEWARE (WAJIB ADA)
+        // 1. DAFTAR ALIAS MIDDLEWARE
         // =================================================================
-        // Bagian ini menghubungkan kata kunci 'role' di route dengan file Logic-nya
-        
+        // Menghubungkan 'role' dengan Logic RoleMiddleware
         $middleware->alias([
             'role' => \App\Http\Middleware\RoleMiddleware::class,
         ]);
 
+
         // =================================================================
+        // 2. MATIKAN CSRF TOKEN KHUSUS MIDTRANS
+        // =================================================================
+        // Midtrans mengirim data POST dari server luar. 
+        // Kita harus mengecualikan route ini dari pengecekan CSRF agar tidak Error 419.
+        $middleware->validateCsrfTokens(except: [
+            'midtrans-callback', // URL route callback midtrans
+        ]);
 
     })
     ->withExceptions(function (Exceptions $exceptions) {

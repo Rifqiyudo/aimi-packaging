@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Midtrans\Config;
+use Midtrans\Snap;
 
 class CheckoutController extends Controller
 {
@@ -26,11 +28,12 @@ class CheckoutController extends Controller
 
     public function process(Request $request)
     {
+        // 1. Validasi Input
         $request->validate([
             'address' => 'required|string',
             'phone' => 'required|string',
             'shipping_method' => 'required|string',
-            'payment_method' => 'required|string',
+            'payment_method' => 'required|string', // Pastikan ini ada
         ]);
 
         $user = Auth::user();
@@ -40,44 +43,75 @@ class CheckoutController extends Controller
             return back()->with('error', 'Keranjang kosong.');
         }
 
-        // Hitung Total
+        // 2. HITUNG TOTAL HARGA (PERBAIKAN UTAMA DI SINI)
         $totalPrice = 0;
         foreach ($carts as $cart) {
             $totalPrice += $cart->product->price * $cart->quantity;
         }
 
-        // GUNAKAN DATABASE TRANSACTION (Agar aman data konsisten)
-        DB::transaction(function () use ($request, $user, $carts, $totalPrice) {
-            
-            // 1. Buat Order
-            $order = Order::create([
-                'user_id' => $user->id,
-                'invoice_number' => 'INV-' . date('Ymd') . '-' . strtoupper(Str::random(5)),
-                'total_price' => $totalPrice,
-                'status' => 'pending', // Menunggu Konfirmasi Admin
-                'address' => $request->address,
-                'phone' => $request->phone,
-                'shipping_method' => $request->shipping_method,
-                'payment_method' => $request->payment_method,
-            ]);
-
-            // 2. Pindahkan isi Cart ke OrderItems & Kurangi Stok
-            foreach ($carts as $cart) {
-                OrderItem::create([
-                    'order_id' => $order->id,
-                    'product_id' => $cart->product_id,
-                    'quantity' => $cart->quantity,
-                    'price' => $cart->product->price,
+        // 3. Simpan ke Database dengan Transaction
+        try {
+            $order = DB::transaction(function () use ($request, $user, $carts, $totalPrice) {
+                
+                // A. Buat Order Utama
+                $newOrder = Order::create([
+                    'user_id' => $user->id,
+                    'invoice_number' => 'INV-' . strtoupper(Str::random(10)), // Generate Invoice Unik
+                    'total_price' => $totalPrice, // <--- INI YANG TADI ERROR (Sekarang sudah ada)
+                    'status' => 'pending',
+                    'address' => $request->address,
+                    'phone' => $request->phone,
+                    'shipping_method' => $request->shipping_method,
+                    'payment_method' => $request->payment_method,
                 ]);
 
-                // Kurangi Stok Produk
-                $cart->product->decrement('stock', $cart->quantity);
+                // B. Pindahkan Item dari Keranjang ke OrderItems
+                foreach ($carts as $cart) {
+                    OrderItem::create([
+                        'order_id' => $newOrder->id,
+                        'product_id' => $cart->product_id,
+                        'quantity' => $cart->quantity,
+                        'price' => $cart->product->price,
+                    ]);
+
+                    // C. Kurangi Stok Produk
+                    $cart->product->decrement('stock', $cart->quantity);
+                }
+
+                // D. Kosongkan Keranjang
+                Cart::where('user_id', $user->id)->delete();
+                
+                return $newOrder;
+            });
+
+            // 4. Logika Midtrans (Jika Metode Pembayaran bukan COD)
+            if ($request->payment_method !== 'COD') {
+                Config::$serverKey = config('midtrans.server_key');
+                Config::$isProduction = config('midtrans.is_production');
+                Config::$isSanitized = config('midtrans.is_sanitized');
+                Config::$is3ds = config('midtrans.is_3ds');
+
+                $params = [
+                    'transaction_details' => [
+                        'order_id' => $order->invoice_number,
+                        'gross_amount' => (int) $order->total_price,
+                    ],
+                    'customer_details' => [
+                        'first_name' => $user->name,
+                        'email' => $user->email,
+                        'phone' => $request->phone,
+                    ],
+                ];
+
+                $snapToken = Snap::getSnapToken($params);
+                $order->update(['snap_token' => $snapToken]);
             }
 
-            // 3. Kosongkan Keranjang
-            Cart::where('user_id', $user->id)->delete();
-        });
+            // 5. Redirect ke Detail Order
+            return redirect()->route('pelanggan.orders.show', $order->id)->with('success', 'Pesanan berhasil dibuat!');
 
-        return redirect()->route('pelanggan.orders.index')->with('success', 'Pesanan berhasil dibuat! Menunggu konfirmasi admin.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 }

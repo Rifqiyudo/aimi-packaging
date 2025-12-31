@@ -11,6 +11,7 @@ class Promo extends Model
 
     protected $fillable = [
         'code',
+        'product_id', // <--- TAMBAHKAN INI
         'discount_amount',
         'start_date',
         'end_date',
@@ -21,4 +22,10 @@ class Promo extends Model
         'start_date' => 'date',
         'end_date' => 'date',
     ];
+
+    // Relasi ke Produk
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

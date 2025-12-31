@@ -200,11 +200,12 @@
                         @forelse($lowStockProducts as $product)
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-xs text-gray-500 overflow-hidden">
+                                <div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-xs text-gray-500 overflow-hidden border border-gray-200">
                                     @if($product->image)
-                                        <img src="{{ asset($product->image) }}" class="w-full h-full object-cover">
+                                        {{-- PERBAIKAN: Menambahkan 'storage/' agar gambar produk muncul --}}
+                                        <img src="{{ asset('storage/' . $product->image) }}" class="w-full h-full object-cover">
                                     @else
-                                        Img
+                                        <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                                     @endif
                                 </div>
                                 <div>
@@ -253,69 +254,13 @@
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
 <script>
-    // --- 1. CONFIG SALES CHART (Line Chart) ---
-    var salesOptions = {
-        series: [{
-            name: 'Penjualan',
-            data: [31, 40, 28, 51, 42, 109, 100] // Data dummy statis
-        }],
-        chart: {
-            height: 300,
-            type: 'area', 
-            fontFamily: 'sans-serif',
-            toolbar: { show: false }
-        },
-        colors: ['#ea580c'], 
-        dataLabels: { enabled: false },
-        stroke: { curve: 'smooth', width: 3 },
-        xaxis: {
-            categories: ["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"],
-        },
-        fill: {
-            type: 'gradient',
-            gradient: {
-                shadeIntensity: 1,
-                opacityFrom: 0.7,
-                opacityTo: 0.2,
-                stops: [0, 90, 100]
-            }
-        },
-        grid: { borderColor: '#f3f4f6' }
-    };
+    // Config Chart tidak berubah (tetap sama)
+    var salesOptions = { series: [{ name: 'Penjualan', data: [31, 40, 28, 51, 42, 109, 100] }], chart: { height: 300, type: 'area', fontFamily: 'sans-serif', toolbar: { show: false } }, colors: ['#ea580c'], dataLabels: { enabled: false }, stroke: { curve: 'smooth', width: 3 }, xaxis: { categories: ["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"], }, fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.7, opacityTo: 0.2, stops: [0, 90, 100] } }, grid: { borderColor: '#f3f4f6' } };
     var salesChart = new ApexCharts(document.querySelector("#salesChart"), salesOptions);
     salesChart.render();
 
-    // --- 2. CONFIG STATUS CHART (Donut Chart) ---
-    var statusOptions = {
-        series: [44, 55, 13, 33], // Data dummy: Pending, Process, Shipped, Completed
-        chart: {
-            height: 300,
-            type: 'donut',
-            fontFamily: 'sans-serif',
-        },
-        labels: ['Pending', 'Diproses', 'Dikirim', 'Selesai'],
-        colors: ['#fcd34d', '#3b82f6', '#6366f1', '#22c55e'], 
-        plotOptions: {
-            pie: {
-                donut: {
-                    size: '75%',
-                    labels: {
-                        show: true,
-                        total: {
-                            show: true,
-                            label: 'Total',
-                            formatter: function (w) {
-                                return w.globals.seriesTotals.reduce((a, b) => a + b, 0)
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        legend: { position: 'bottom' }
-    };
+    var statusOptions = { series: [44, 55, 13, 33], chart: { height: 300, type: 'donut', fontFamily: 'sans-serif', }, labels: ['Pending', 'Diproses', 'Dikirim', 'Selesai'], colors: ['#fcd34d', '#3b82f6', '#6366f1', '#22c55e'], plotOptions: { pie: { donut: { size: '75%', labels: { show: true, total: { show: true, label: 'Total', formatter: function (w) { return w.globals.seriesTotals.reduce((a, b) => a + b, 0) } } } } } }, legend: { position: 'bottom' } };
     var statusChart = new ApexCharts(document.querySelector("#statusChart"), statusOptions);
     statusChart.render();
 </script>
-
 @endsection
