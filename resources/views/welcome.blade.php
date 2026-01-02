@@ -2,35 +2,99 @@
 
 @section('content')
 
-<div class="relative bg-gradient-to-b from-orange-50 to-white overflow-hidden">
-    <div class="max-w-7xl mx-auto">
-        <div class="relative z-10 pb-8 bg-transparent sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32 pt-20 px-4 sm:px-6 lg:px-8">
-            <main class="mt-10 mx-auto max-w-7xl sm:mt-12 md:mt-16 lg:mt-20 xl:mt-28">
-                <div class="sm:text-center lg:text-left">
-                    <span class="inline-block py-1 px-3 rounded-full bg-orange-100 text-orange-600 border border-orange-200 text-xs font-bold tracking-wide mb-5 uppercase shadow-sm">
-                        Official Marketplace
-                    </span>
-                    <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-                        <span class="block xl:inline">Solusi Kemasan</span>
-                        <span class="block text-orange-500">Terpercaya & Berkualitas</span>
-                    </h1>
-                    <p class="mt-4 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0 leading-relaxed">
-                        Aimi Packaging hadir sebagai mitra bisnis Anda dalam menyediakan perlengkapan packing berkualitas tinggi seperti Lakban, Bubble Mailer, dan Plastik Wrap dengan harga terbaik.
-                    </p>
-                    <div class="mt-8 sm:mt-10 sm:flex sm:justify-center lg:justify-start gap-4">
-                        <a href="#katalog" class="flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-orange-500 hover:bg-orange-600 md:py-4 md:text-lg shadow-lg shadow-orange-500/30 transition transform hover:-translate-y-1">
-                            Lihat Produk
-                        </a>
-                        <a href="https://wa.me/6282132257239" target="_blank" class="flex items-center justify-center px-8 py-3 border border-gray-300 text-base font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50 md:py-4 md:text-lg transition transform hover:-translate-y-1">
-                            Hubungi Sales
+{{-- 1. LOAD LIBRARY SLIDER (SWIPER JS) --}}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<style>
+    /* Custom warna tombol panah slider agar oranye */
+    .swiper-button-next, .swiper-button-prev { color: #ea580c !important; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+    .swiper-pagination-bullet-active { background-color: #ea580c !important; }
+    .swiper-pagination-bullet { background-color: white; opacity: 0.8; }
+</style>
+
+{{-- ========================================================= --}}
+{{-- BANNER SLIDER SECTION (PENGGANTI HERO SECTION LAMA)       --}}
+{{-- ========================================================= --}}
+<div class="relative bg-white overflow-hidden">
+    <div class="swiper mySwiper w-full h-[500px] md:h-[600px]">
+        <div class="swiper-wrapper">
+            
+            {{-- SLIDE 1: INTRO UTAMA (Konten Lama) --}}
+            <div class="swiper-slide relative">
+                {{-- Gambar Background --}}
+                <div class="absolute inset-0">
+                    <img src="{{ asset('images/Plastik4.jpg') }}" alt="Aimi Packaging Banner Utama" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-r from-gray-900/90 via-gray-900/40 to-transparent"></div>
+                </div>
+                {{-- Teks Overlay --}}
+                <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
+                    <div class="max-w-2xl text-white pt-10">
+                        <span class="inline-block py-1 px-3 rounded-full bg-orange-600 text-white text-xs font-bold tracking-wide mb-4 uppercase shadow-md">
+                            Official Marketplace
+                        </span>
+                        <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 leading-tight drop-shadow-lg">
+                            Solusi Kemasan <br> <span class="text-orange-500">Terpercaya & Kuat</span>
+                        </h1>
+                        <p class="text-lg md:text-xl text-gray-100 mb-8 leading-relaxed drop-shadow-md">
+                            Aimi Packaging hadir sebagai mitra bisnis Anda menyediakan Lakban, Bubble Mailer, dan Plastik Wrap kualitas terbaik dengan harga pabrik.
+                        </p>
+                        <div class="flex gap-4">
+                            <a href="#katalog" class="px-8 py-3 bg-orange-600 hover:bg-orange-700 rounded-full font-bold transition shadow-lg transform hover:-translate-y-1">
+                                Belanja Sekarang
+                            </a>
+                            <a href="{{ route('about') }}" class="px-8 py-3 bg-transparent border-2 border-white hover:bg-white hover:text-gray-900 rounded-full font-bold transition transform hover:-translate-y-1">
+                                Tentang Kami
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- SLIDE 2: BANNER PROMO (IKLAN) --}}
+            <div class="swiper-slide relative bg-gray-800">
+                <div class="absolute inset-0">
+                    {{-- Ganti src dengan gambar banner promo Anda --}}
+                    {{-- Contoh placeholder pakai CSS gradient --}}
+                    <div class="w-full h-full bg-gradient-to-br from-blue-900 to-gray-900 flex items-center justify-center">
+                        {{-- Jika ada gambar promo: <img src="..." class="w-full h-full object-cover"> --}}
+                    </div>
+                </div>
+                <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-center text-center">
+                    <div class="max-w-3xl text-white">
+                        <span class="text-orange-400 font-bold tracking-widest uppercase mb-2 block">Promo Bulan Ini</span>
+                        <h2 class="text-4xl md:text-6xl font-extrabold mb-6">Diskon Spesial Grosir <br> Hingga 20%</h2>
+                        <p class="text-xl mb-8 text-gray-300">Dapatkan harga khusus untuk pembelian Lakban Bening dalam jumlah besar. Stok terbatas!</p>
+                        <a href="#katalog" class="inline-block px-8 py-4 bg-white text-gray-900 rounded-full font-bold hover:bg-gray-100 transition shadow-xl">
+                            Lihat Produk Promo
                         </a>
                     </div>
                 </div>
-            </main>
+            </div>
+
+            {{-- SLIDE 3: LAYANAN PENGIRIMAN --}}
+            <div class="swiper-slide relative">
+                <div class="absolute inset-0">
+                    <img src="{{ asset('images/perusahaan.jpg') }}" alt="Gudang Aimi" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/60"></div>
+                </div>
+                <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
+                    <div class="max-w-2xl text-white ml-auto text-right">
+                        <h2 class="text-3xl md:text-5xl font-bold mb-4">Pengiriman Cepat & Aman</h2>
+                        <p class="text-lg text-gray-200 mb-6">
+                            Kami memastikan setiap produk dikemas dengan standar tinggi dan dikirim tepat waktu ke seluruh wilayah Indonesia.
+                        </p>
+                        <a href="https://wa.me/6282132257239" target="_blank" class="inline-flex items-center gap-2 text-orange-400 hover:text-orange-300 font-bold text-lg">
+                            Hubungi Admin Logistik <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
         </div>
-    </div>
-    <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 bg-gray-100">
-        <img class="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full opacity-90 hover:opacity-100 transition duration-500" src="{{ asset('images/Plastik4.jpg') }}" alt="Gudang Aimi Packaging - Plastik Berkualitas">
+        
+        {{-- Navigasi Slider --}}
+        <div class="swiper-button-next !hidden md:!flex"></div>
+        <div class="swiper-button-prev !hidden md:!flex"></div>
+        <div class="swiper-pagination"></div>
     </div>
 </div>
 
@@ -129,7 +193,7 @@
                         {{-- OVERLAY BUTTONS --}}
                         <div class="absolute inset-0 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition duration-300 bg-black/10 backdrop-blur-[2px]">
                             
-                            {{-- Tombol Preview (Fix: data-product) --}}
+                            {{-- Tombol Preview --}}
                             <button type="button" 
                                     onclick="openPreviewModal(this)" 
                                     data-product="{{ json_encode($product) }}"
@@ -158,7 +222,6 @@
                     
                     <div class="p-5 flex flex-col grow">
                         <div class="grow">
-                            {{-- Judul Produk (Fix: data-product) --}}
                             <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2 min-h-14 group-hover:text-orange-500 transition-colors cursor-pointer" 
                                 onclick="openPreviewModal(this)"
                                 data-product="{{ json_encode($product) }}">
@@ -175,7 +238,6 @@
                         </div>
                         
                         <div class="pt-4 border-t border-gray-100">
-                            {{-- Tombol Utama (Fix: data-product) --}}
                             <button type="button" 
                                     onclick="openPreviewModal(this)" 
                                     data-product="{{ json_encode($product) }}"
@@ -406,7 +468,30 @@
     </div>
 </div>
 
-{{-- SCRIPT UNTUK MODAL (FIXED) --}}
+{{-- SCRIPT SWIPER (SLIDER) --}}
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+    var swiper = new Swiper(".mySwiper", {
+        spaceBetween: 0,
+        effect: "fade", // Efek transisi
+        centeredSlides: true,
+        autoplay: {
+            delay: 5000, // Geser setiap 5 detik
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        loop: true,
+    });
+</script>
+
+{{-- SCRIPT MODAL (POPUP) --}}
 <script>
     let currentStock = 0;
 

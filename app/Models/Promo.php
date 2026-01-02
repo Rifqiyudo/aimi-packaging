@@ -9,23 +9,34 @@ class Promo extends Model
 {
     use HasFactory;
 
+    /**
+     * Kolom yang bisa diisi (Sesuai dengan Migration sebelumnya)
+     */
     protected $fillable = [
-        'code',
-        'product_id', // <--- TAMBAHKAN INI
-        'discount_amount',
+        'name',       // Nama Promo (misal: Flash Sale)
+        'type',       // Tipe: 'percent' atau 'fixed'
+        'value',      // Nilai diskon
         'start_date',
         'end_date',
         'is_active',
     ];
 
+    /**
+     * Konversi otomatis tipe data tanggal
+     */
     protected $casts = [
         'start_date' => 'date',
-        'end_date' => 'date',
+        'end_date'   => 'date',
+        'is_active'  => 'boolean',
     ];
 
-    // Relasi ke Produk
-    public function product()
+    /**
+     * Relasi Many-to-Many ke Produk
+     * (Satu promo bisa dimiliki banyak produk)
+     */
+    public function products()
     {
-        return $this->belongsTo(Product::class);
+        // Menggunakan tabel pivot 'product_promo'
+        return $this->belongsToMany(Product::class, 'product_promo');
     }
 }

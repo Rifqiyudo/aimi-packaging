@@ -4,51 +4,72 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Promo;
-use App\Models\Product; // <--- Import Model Product
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class PromoController extends Controller
 {
     public function index()
     {
-        // Load relasi product agar nama produk muncul di tabel
-        $promos = Promo::with('product')->latest()->get();
+        $promos = Promo::latest()->get();
         return view('admin.promos.index', compact('promos'));
     }
 
     public function create()
     {
-        // Ambil list produk untuk dropdown
-        $products = Product::where('is_active', true)->select('id', 'name')->get();
+        // Ambil semua produk untuk dipilih
+        $products = Product::all();
         return view('admin.promos.create', compact('products'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'code' => 'required|string|unique:promos,code|max:20',
-            'product_id' => 'nullable|exists:products,id', // Validasi baru
-            'discount_amount' => 'required|numeric|min:0',
+            'name' => 'required',
+            'type' => 'required|in:percent,fixed',
+            'value' => 'required|numeric',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
+            'products' => 'required|array' // Wajib pilih minimal 1 produk
         ]);
 
-        Promo::create([
-            'code' => strtoupper($request->code),
-            'product_id' => $request->product_id, // Simpan ID produk (atau null)
-            'discount_amount' => $request->discount_amount,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
-            'is_active' => true
-        ]);
+        $promo = Promo::create($request->except('products'));
+        
+        // Sambungkan promo ke produk yang dipilih
+        $promo->products()->sync($request->products);
 
-        return redirect()->route('admin.promos.index')->with('success', 'Kode Promo berhasil diterbitkan!');
+        return redirect()->route('admin.promos.index')->with('success', 'Promo berhasil dibuat!');
     }
 
-    // ... method destroy dll tetap sama ...
-    public function destroy($id)
+    public function edit(Promo $promo)
     {
-        Promo::findOrFail($id)->delete();
-        return redirect()->route('admin.promos.index')->with('success', 'Promo dihapus.');
+        $products = Product::all();
+        // Ambil ID produk yang sedang terhubung dengan promo ini
+        $selectedProducts = $promo->products->pluck('id')->toArray();
+        
+        return view('admin.promos.edit', compact('promo', 'products', 'selectedProducts'));
+    }
+
+    public function update(Request $request, Promo $promo)
+    {
+        $request->validate([
+            'name' => 'required',
+            'type' => 'required|in:percent,fixed',
+            'value' => 'required|numeric',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'products' => 'required|array'
+        ]);
+
+        $promo->update($request->except('products'));
+        $promo->products()->sync($request->products); // Update relasi produk
+
+        return redirect()->route('admin.promos.index')->with('success', 'Promo diperbarui!');
+    }
+
+    public function destroy(Promo $promo)
+    {
+        $promo->delete();
+        return back()->with('success', 'Promo dihapus.');
     }
 }

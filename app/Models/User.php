@@ -2,15 +2,25 @@
 
 namespace App\Models;
 
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+use App\Models\Address; // <--- 1. PASTIKAN INI ADA
 
 class User extends Authenticatable
 {
+    use HasApiTokens, HasFactory, Notifiable;
+
     protected $fillable = [
         'name',
         'email',
         'password',
-        'role'
+        'role',
+        'phone',
+        'avatar',
+        'address', // (Opsional) Alamat lama
     ];
 
     protected $hidden = [
@@ -18,41 +28,16 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    /* =====================
-     | RELATIONSHIPS
-     ===================== */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
 
-    public function orders()
+    // =========================================================
+    // 2. FUNGSI RELASI INI WAJIB ADA AGAR TIDAK ERROR NULL
+    // =========================================================
+    public function addresses()
     {
-        return $this->hasMany(Order::class);
-    }
-
-    public function reviews()
-    {
-        return $this->hasMany(Review::class);
-    }
-
-    public function carts()
-    {
-        return $this->hasMany(Cart::class);
-    }
-
-    /* =====================
-     | ROLE HELPERS
-     ===================== */
-
-    public function isAdmin()
-    {
-        return $this->role === 'admin';
-    }
-
-    public function isKaryawan()
-    {
-        return $this->role === 'karyawan';
-    }
-
-    public function isPelanggan()
-    {
-        return $this->role === 'pelanggan';
+        return $this->hasMany(Address::class)->orderBy('is_primary', 'desc');
     }
 }
